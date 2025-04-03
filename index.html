@@ -4,144 +4,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temperature Converter</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <title>Neon Temperature Converter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #0a0e17;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 2rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background-bubbles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #6c43ff33, #00d9ff33);
+            animation: float 20s infinite;
+            filter: blur(30px);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(10deg); }
+            50% { transform: translateY(20px) rotate(-10deg); }
+            75% { transform: translateY(-10px) rotate(5deg); }
         }
 
         h1 {
-            color: white;
+            color: #fff;
             margin: 2rem 0;
-            font-weight: 600;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 2.5rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 15px #00d9ff80;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.05);
             padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             width: 100%;
             max-width: 500px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 50px #6c43ff40;
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
         }
 
         .input-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
         }
 
         label {
             display: block;
-            margin-bottom: 0.5rem;
-            color: #4a5568;
-            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #8a8f98;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
         }
 
         .temp-input, .unit-input {
             width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 1rem;
+            padding: 1.2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #2a2e35;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            color: #fff;
             transition: all 0.3s ease;
         }
 
         .temp-input:focus, .unit-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #00d9ff;
+            box-shadow: 0 0 20px #00d9ff40;
+        }
+
+        .unit-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238a8f98'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
         }
 
         .submit-button {
             width: 100%;
-            padding: 1rem;
-            background: #667eea;
-            color: white;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #6c43ff, #00d9ff);
+            color: #fff;
             border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 500;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-transform: uppercase;
             letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
         }
 
         .submit-button:hover {
-            background: #764ba2;
             transform: translateY(-2px);
+            box-shadow: 0 5px 25px #6c43ff80;
         }
 
-        .submit-button:active {
-            transform: translateY(0);
+        .submit-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, #ffffff20, transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-150%) rotate(45deg); }
+            100% { transform: translateX(150%) rotate(45deg); }
         }
 
         .result {
             margin-top: 2rem;
-            background: #f7fafc;
+            background: rgba(0, 0, 0, 0.2);
             padding: 1.5rem;
-            border-radius: 10px;
+            border-radius: 15px;
+            border: 1px solid #2a2e35;
         }
 
         .result div {
-            padding: 0.5rem 0;
-            color: #4a5568;
-            font-weight: 500;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result div::before {
+            content: '🌡️';
+            font-size: 1.3rem;
         }
 
         footer {
             margin-top: auto;
-            color: white;
+            color: #8a8f98;
             padding: 2rem 0;
             text-align: center;
             font-size: 0.9rem;
+            position: relative;
+            z-index: 2;
         }
 
         strong {
-            color: #ffd700;
+            color: #00d9ff;
+            font-weight: 500;
         }
 
-        .error {
-            color: #e53e3e;
-            font-weight: 500;
-            text-align: center;
-            margin-top: 1rem;
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Dynamic background bubbles */
+        const bubbles = document.createElement('div');
+        bubbles.className = 'background-bubbles';
+        document.body.appendChild(bubbles);
+
+        for (let i = 0; i < 10; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            bubble.style.width = `${Math.random() * 200 + 100}px`;
+            bubble.style.height = bubble.style.width;
+            bubble.style.left = `${Math.random() * 100}%`;
+            bubble.style.top = `${Math.random() * 100}%`;
+            bubble.style.animationDelay = `${Math.random() * 20}s`;
+            bubbles.appendChild(bubble);
         }
     </style>
 </head>
 
 <body>
-    <h1>🌡️ Temperature Converter</h1>
+    <h1>⚡ NEO CONVERTER ⚡</h1>
     
     <div class="container">
         <div class="input-group">
-            <label for="magnitude">Enter Temperature</label>
-            <input type="number" class="temp-input" name="magnitude" placeholder="Enter temperature...">
+            <label>TEMPERATURE VALUE</label>
+            <input type="number" class="temp-input" placeholder="Enter value..." step="0.01">
         </div>
 
         <div class="input-group">
-            <label for="unit">Select Unit</label>
-            <select class="unit-input" name="unit">
-                <option value="celsius">Celsius (°C)</option>
-                <option value="fahrenheit">Fahrenheit (°F)</option>
-                <option value="kelvin">Kelvin (K)</option>
+            <label>ORIGIN UNIT</label>
+            <select class="unit-input">
+                <option value="celsius">CELSIUS (°C)</option>
+                <option value="fahrenheit">FAHRENHEIT (°F)</option>
+                <option value="kelvin">KELVIN (K)</option>
             </select>
         </div>
 
-        <button class="submit-button">Convert</button>
+        <button class="submit-button">
+            <span class="button-text">CONVERT NOW</span>
+        </button>
 
         <div class="result">
             <div class="first-conversion"></div>
@@ -149,7 +248,7 @@
         </div>
     </div>
 
-    <footer>Made by <strong>Your Name</strong>, styled by <strong>Design Partner</strong></footer>
+    <footer>Developed by <strong>NOVA</strong> | Designed by <strong>STELLAR</strong></footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -159,47 +258,76 @@
             const firstConversion = document.querySelector('.first-conversion');
             const secondConversion = document.querySelector('.second-conversion');
 
+            function animateConvert() {
+                submitBtn.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    submitBtn.style.transform = 'scale(1)';
+                }, 100);
+            }
+
             function convertTemperature() {
+                animateConvert();
                 const temp = parseFloat(tempInput.value);
+                
                 if (isNaN(temp)) {
-                    showError('Please enter a valid number');
+                    tempInput.classList.add('error-shake');
+                    setTimeout(() => tempInput.classList.remove('error-shake'), 500);
+                    firstConversion.textContent = '❌ Invalid input!';
+                    secondConversion.textContent = '';
                     return;
                 }
 
                 const unit = unitInput.value;
                 let results = [];
+                const icons = ['❄️', '🌡️', '🔥'];
 
                 switch(unit) {
                     case 'celsius':
-                        results.push(`${((temp * 9/5) + 32).toFixed(2)} °F`);
-                        results.push(`${(temp + 273.15).toFixed(2)} K`);
+                        results.push(`${((temp * 9/5) + 32).toFixed(2)} °F ${icons[1]}`);
+                        results.push(`${(temp + 273.15).toFixed(2)} K ${icons[2]}`);
                         break;
                     case 'fahrenheit':
-                        results.push(`${((temp - 32) * 5/9).toFixed(2)} °C`);
-                        results.push(`${((temp - 32) * 5/9 + 273.15).toFixed(2)} K`);
+                        results.push(`${((temp - 32) * 5/9).toFixed(2)} °C ${icons[0]}`);
+                        results.push(`${((temp - 32) * 5/9 + 273.15).toFixed(2)} K ${icons[2]}`);
                         break;
                     case 'kelvin':
-                        results.push(`${(temp - 273.15).toFixed(2)} °C`);
-                        results.push(`${((temp - 273.15) * 9/5 + 32).toFixed(2)} °F`);
+                        results.push(`${(temp - 273.15).toFixed(2)} °C ${icons[0]}`);
+                        results.push(`${((temp - 273.15) * 9/5 + 32).toFixed(2)} °F ${icons[1]}`);
                         break;
                 }
 
-                firstConversion.textContent = results[0];
-                secondConversion.textContent = results[1];
-            }
-
-            function showError(message) {
-                firstConversion.textContent = message;
-                secondConversion.textContent = '';
+                firstConversion.innerHTML = results[0];
+                secondConversion.innerHTML = results[1];
             }
 
             submitBtn.addEventListener('click', convertTemperature);
-            
-            tempInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') convertTemperature();
-            });
+            tempInput.addEventListener('keypress', (e) => e.key === 'Enter' && convertTemperature());
         });
     </script>
+
+    <style>
+        .error-shake {
+            animation: shake 0.4s ease;
+            border-color: #ff0066 !important;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-5px); }
+            80% { transform: translateX(5px); }
+        }
+
+        .result div {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </body>
 
 </html>

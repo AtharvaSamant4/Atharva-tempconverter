@@ -4,31 +4,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temperature converter</title>
-    <link href="style.css" rel="stylesheet" />
-    <script src="script.js" defer></script>
+    <title>Temperature Converter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        h1 {
+            color: white;
+            margin: 2rem 0;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .temp-input, .unit-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .temp-input:focus, .unit-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 2rem;
+            background: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .result div {
+            padding: 0.5rem 0;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        footer {
+            margin-top: auto;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        strong {
+            color: #ffd700;
+        }
+
+        .error {
+            color: #e53e3e;
+            font-weight: 500;
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Temperature Converter</h1>
-    <label for="magnitude">Enter Temperature:</label>
-    <input class="temp-input" name="magnitude">
-    <label for="unit">Enter Unit:</label>
-    <select class="unit-input" name="unit">
-        <option value="kelvin">Kelvin</option>
-        <option value="fahrenheit">Fahrenheit</option>
-        <option value="celsius">Celsius</option>
-    </select>
-    <button class="submit-button">Submit</button>
+    <h1>🌡️ Temperature Converter</h1>
+    
+    <div class="container">
+        <div class="input-group">
+            <label for="magnitude">Enter Temperature</label>
+            <input type="number" class="temp-input" name="magnitude" placeholder="Enter temperature...">
+        </div>
 
-    <div class="result">
-        <div class="first-conversion"></div>
-        <div class="second-conversion"></div>
+        <div class="input-group">
+            <label for="unit">Select Unit</label>
+            <select class="unit-input" name="unit">
+                <option value="celsius">Celsius (°C)</option>
+                <option value="fahrenheit">Fahrenheit (°F)</option>
+                <option value="kelvin">Kelvin (K)</option>
+            </select>
+        </div>
+
+        <button class="submit-button">Convert</button>
+
+        <div class="result">
+            <div class="first-conversion"></div>
+            <div class="second-conversion"></div>
+        </div>
     </div>
 
-    <footer>Made by <strong>Your name here</strong>, styled by <strong>Friend's name here</strong></footer>
+    <footer>Made by <strong>Your Name</strong>, styled by <strong>Design Partner</strong></footer>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tempInput = document.querySelector('.temp-input');
+            const unitInput = document.querySelector('.unit-input');
+            const submitBtn = document.querySelector('.submit-button');
+            const firstConversion = document.querySelector('.first-conversion');
+            const secondConversion = document.querySelector('.second-conversion');
 
+            function convertTemperature() {
+                const temp = parseFloat(tempInput.value);
+                if (isNaN(temp)) {
+                    showError('Please enter a valid number');
+                    return;
+                }
+
+                const unit = unitInput.value;
+                let results = [];
+
+                switch(unit) {
+                    case 'celsius':
+                        results.push(`${((temp * 9/5) + 32).toFixed(2)} °F`);
+                        results.push(`${(temp + 273.15).toFixed(2)} K`);
+                        break;
+                    case 'fahrenheit':
+                        results.push(`${((temp - 32) * 5/9).toFixed(2)} °C`);
+                        results.push(`${((temp - 32) * 5/9 + 273.15).toFixed(2)} K`);
+                        break;
+                    case 'kelvin':
+                        results.push(`${(temp - 273.15).toFixed(2)} °C`);
+                        results.push(`${((temp - 273.15) * 9/5 + 32).toFixed(2)} °F`);
+                        break;
+                }
+
+                firstConversion.textContent = results[0];
+                secondConversion.textContent = results[1];
+            }
+
+            function showError(message) {
+                firstConversion.textContent = message;
+                secondConversion.textContent = '';
+            }
+
+            submitBtn.addEventListener('click', convertTemperature);
+            
+            tempInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') convertTemperature();
+            });
+        });
+    </script>
 </body>
 
 </html>
